@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phim Bộ HLS</title>
+  <!-- Video.js CSS -->
+  <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0d0d0d;
+      color: #f1f1f1;
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar chứa danh sách tập */
+    .sidebar {
+      width: 220px;
+      background: #1a1a1a;
+      border-right: 2px solid #333;
+      overflow-y: auto;
+    }
+    .sidebar h2 {
+      text-align: center;
+      padding: 15px;
+      margin: 0;
+      font-size: 18px;
+      background: #262626;
+      border-bottom: 1px solid #333;
+    }
+    .episode-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .episode-list li {
+      padding: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #333;
+      transition: 0.3s;
+    }
+    .episode-list li:hover {
+      background: #333;
+    }
+    .episode-list li.active {
+      background: #e50914;
+      color: #fff;
+    }
+
+    /* Khu vực video */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .video-js {
+      width: 100%;
+      max-width: 900px;
+      height: 500px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+    }
+
+    /* Thanh tiêu đề */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #141414;
+      padding: 10px 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #e50914;
+      border-bottom: 2px solid #333;
+      z-index: 10;
+    }
+
+    body {
+      padding-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">📺 Phim Bộ Demo</div>
+
+  <div class="sidebar">
+    <h2>Danh sách tập</h2>
+    <ul class="episode-list" id="episodeList"></ul>
+  </div>
+
+  <div class="main-content">
+    <video
+      id="my-video"
+      class="video-js vjs-default-skin"
+      controls
+      preload="auto"
+      data-setup='{}'>
+      <source src="" type="application/x-mpegURL" />
+    </video>
+  </div>
+
+  <!-- Video.js -->
+  <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+  <script>
+    const episodes = [
+      { title: "Tập 1", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/1.m3u8" },
+      { title: "Tập 2", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/2.m3u8" },
+      { title: "Tập 3", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/3.m3u8" },
+      { title: "Tập 4", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/4.m3u8" },
+      { title: "Tập 5", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/5.m3u8" },
+      { title: "Tập 6", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/6.m3u8" },
+      { title: "Tập 7", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/7.m3u8" },
+      { title: "Tập 8", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/8.m3u8" },
+      { title: "Tập 9", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/9.m3u8" },
+      { title: "Tập 10", url: "https://raw.githubusercontent.com/akl0505/beastgame/main/10.m3u8" }
+    ];
+
+    const player = videojs('my-video');
+    const listEl = document.getElementById('episodeList');
+
+    function loadEpisode(index) {
+      const episode = episodes[index];
+      player.src({ src: episode.url, type: 'application/x-mpegURL' });
+      player.play();
+      document.querySelectorAll('.episode-list li').forEach(li => li.classList.remove('active'));
+      listEl.children[index].classList.add('active');
+    }
+
+    // Render danh sách tập
+    episodes.forEach((ep, i) => {
+      const li = document.createElement('li');
+      li.textContent = ep.title;
+      li.addEventListener('click', () => loadEpisode(i));
+      listEl.appendChild(li);
+    });
+
+    // Tự load tập 1
+    loadEpisode(0);
+  </script>
+</body>
+</html>
